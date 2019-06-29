@@ -1,0 +1,21 @@
+{
+  "name": "request-manager",
+  "version": "1.0.0",
+  "description": "Handle multiple request async",
+  "main": "index.js",
+  "repository": { "type" : "git", "url": "https://github.com/GabrieleNunez/request-manager.git" },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriele M. Nunez",
+  "license": "",
+  "devDependencies": {
+    "@types/node": "^12.0.10",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "eslint": "^6.0.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  },
+  "optionalDependencies": {}
+}
