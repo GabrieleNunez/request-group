@@ -16,13 +16,13 @@ export default class RequestManager<PageEngine> {
     /**
 		Construct a request manager, the optional additional parameters provide a way to configure  internal mechanics to the request manager
 	*/
-    public constructor(maxInstances: number = 4, timerManager: number = 2500) {
+    public constructor(maxQueueSize: number = 4, timerManager: number = 2500) {
         this.timerManager = timerManager;
-        if (maxInstances === 0) {
+        if (maxQueueSize === 0) {
             let cpuCores = os.cpus().length;
             this.maxInstances = cpuCores;
         } else {
-            this.maxInstances = maxInstances;
+            this.maxInstances = maxQueueSize;
         }
 
         this.runningRequests = 0;
