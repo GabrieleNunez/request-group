@@ -1,6 +1,6 @@
 {
   "name": "request-manager",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "Handle multiple request async",
   "main": "index.js",
   "repository": {
@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gabriele M. Nunez",
-  "license": "",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^12.0.10",
     "@typescript-eslint/eslint-plugin": "^1.11.0",

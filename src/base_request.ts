@@ -56,24 +56,6 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
         return (moment().unix() - this.momentPing.unix()) > 60;
     }
 
-
-    /**
-		Based on parameters specified a couple things can happen.
-		1.) If both key and value is specified then a value will be linked to the specified key in the request metata
-		2.) If only the key is specified then the function will return the value linked to the key
-		3.) If both key and value are undefined, nothing happens and undefined is returned
-	*/
-    public metadata(key: string, value?: any): any {
-        if (typeof key != "undefined" && typeof value != "undefined") {
-            this.metadataStorage[key] = value;
-            return this.metadataStorage[key];
-        } else if (typeof key != "undefined") {
-            return this.metadataStorage[key];
-        } else {
-            return undefined;
-        }
-    }
-
     /**
     * 
     * @param key Grab the value that matches our key
