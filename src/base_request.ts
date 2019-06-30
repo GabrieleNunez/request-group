@@ -1,14 +1,11 @@
 import Request from '@root/request';
 import * as moment from 'moment';
 
-
 /**
  * The type of data allowed into our metadata
  * Right now this is set to `unknown` but this will most likely change in the future
  */
 export type MetadataStorageType = unknown;
-
-export type WebRequestMethods = 'GET' | 'POST';
 
 /**
  * A simple interface that conforms to a certain expectation of how we want our metadata to be stored
@@ -18,16 +15,7 @@ export interface MetadataStorage {
     [field: string]: MetadataStorageType;
 }
 
-
-/**
- * A way to store information about the form we are going to attempt to send up using whatever page engine is specified
- */
-export interface WebRequestForm {
-    [id: string]: string;
-}
-
-export abstract class WebRequest<PageEngine> implements Request<PageEngine> {
-
+export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
     protected requestCompleted: boolean;
     protected requestUrl: string;
     protected momentCreated: moment.Moment;
@@ -38,10 +26,8 @@ export abstract class WebRequest<PageEngine> implements Request<PageEngine> {
     protected metadataStorage: MetadataStorage;
     protected requestErrors: string[];
     protected pageData: PageEngine | null;
-    protected requestMethod: WebRequestMethods;
-    protected requestForm: WebRequestForm;
-    protected requestCookie: string;
 
+    
     /**
 		Construct our generic web request.
 		Note: this generic web request has NO real world functionality
@@ -58,9 +44,6 @@ export abstract class WebRequest<PageEngine> implements Request<PageEngine> {
         this.requestUrl = requestUrl;
         this.requestErrors = [];
         this.pageData = null;
-        this.requestMethod = 'GET';
-        this.requestForm = {};
-        this.requestCookie = '';
     }
 
     /** Ping the request to set a timestamp. We can check this timestamp whenever we need to to determine if our request is stalling out */
@@ -71,48 +54,6 @@ export abstract class WebRequest<PageEngine> implements Request<PageEngine> {
     /** Determine if based off our last ping if this request is expired. Each request has 300 seconds between each ping before a request is considered expires */
     public isExpired(): boolean {
         return (moment().unix() - this.momentPing.unix()) > 60;
-    }
-
-    /**
-     * Gets the current method being used in the web request
-     */
-    public getMethod(): WebRequestMethods {
-        return this.requestMethod;
-    }
-
-    /**
-     * Sets the web request method being used to the specified method
-     * @param requestMethod The intended method to be used by the request
-     */
-    public setMethod(requestMethod: WebRequestMethods): void {
-        this.requestMethod = requestMethod;
-    }
-
-    /**
-     * Using the specified key, set the supplied value in our form object 
-     * @param key The key that we want to point toward a field in the form object
-     * @param value A value that we want to set the field to
-     */
-    public setForm(key: string, value: string): void {
-        this.requestForm[key] = value;
-    }
-
-    /**
-     * Using the specified key get the value that matches the key in our form storage
-     * @param key The name of the field we want to retrieve in our form
-     * @returns Either the string value of the form that matches the specified field or NULL if the key does not exist in our form
-     */
-    public getForm(key: string): string | null {
-        return typeof this.requestForm[key] !== "undefined" ? this.requestForm[key] : null;
-    }
-
-
-    /**
-     * Sets the request cookie to whatever value is specified
-     * @param entireCookie The literal entire RAW cookie to pass and store
-     */
-    public setCookie(entireCookie: string): void {
-        this.requestCookie = entireCookie;
     }
 
 
@@ -201,7 +142,6 @@ export abstract class WebRequest<PageEngine> implements Request<PageEngine> {
      * Run the request
      */
     public abstract run(): Promise<Request<PageEngine>>;
-
 }
 
-export default WebRequest;
+export default BaseRequest;
