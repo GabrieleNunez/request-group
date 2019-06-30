@@ -2,13 +2,14 @@
   "name": "request-manager",
   "version": "0.5.0",
   "description": "Handle multiple request async",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/GabrieleNunez/request-manager.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo \"Building\" && tsc"
   },
   "author": "Gabriele M. Nunez",
   "license": "MIT",

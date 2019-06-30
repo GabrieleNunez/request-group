@@ -2,7 +2,7 @@
 import Request from './request';
 import * as os from 'os';
 
-export default class RequestManager<PageEngine> {
+export class RequestManager<PageEngine> {
 
     private requests: Request<PageEngine>[];
     private completedUrls: string[];
@@ -170,3 +170,6 @@ export default class RequestManager<PageEngine> {
     }
 
 }	
+
+
+export default RequestManager;
