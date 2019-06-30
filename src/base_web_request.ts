@@ -1,4 +1,4 @@
-import BaseRequest from '@root/base_request';
+import BaseRequest from './base_request';
 
 /**
  * Certain methods that pertain strictly to the utilization of HTTP

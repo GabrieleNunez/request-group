@@ -1,4 +1,4 @@
-import Request from '@root/request';
+import Request from './request';
 import * as moment from 'moment';
 
 /**

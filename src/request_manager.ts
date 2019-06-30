@@ -1,5 +1,5 @@
 
-import Request from '@root/request';
+import Request from './request';
 import * as os from 'os';
 
 export default class RequestManager<PageEngine> {
