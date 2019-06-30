@@ -37,7 +37,7 @@ export interface Request<PageEngine> {
      * @param key Grab the value that matches our key
      * @typeparam T1 a type that specifies what we are expecting back from the metadata field
      */
-    getMetadata<T1>(key: string): T1;
+    getMetadata<T1>(key: string): T1 | null;
     
     /**
      * Free up any resources used by the request. useful if dealing with 
@@ -53,7 +53,7 @@ export interface Request<PageEngine> {
      * Run the specified request at a new url
      * @param requestUrl The url to rerun the request
      */
-    goto(requestUrl: string): Promise<PageEngine>;
+    goto(requestUrl: string): Promise<Request<PageEngine>>;
 
     /**
      * Returns the output of the page as the PageEngine type that was specified. This allows you to read/manipulate it in anyway you want
