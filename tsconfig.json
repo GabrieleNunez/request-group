@@ -6,7 +6,11 @@
 		"sourceMap" : true,
         "alwaysStrict" : true,
         "strictNullChecks": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl" : "./src",
+        "paths": {
+            "@root/*" : ["*"],
+        }
 	},
 	// "files" : [ ]
 	"include" : [
@@ -15,6 +19,6 @@
 	"exclude" : [
 		"node_modules",
 		"./src/env.sample.ts",
-	]
+    ],
 }
 
