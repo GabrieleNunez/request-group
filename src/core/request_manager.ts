@@ -1,9 +1,7 @@
-
 import Request from './request';
 import * as os from 'os';
 
 export class RequestManager<PageEngine> {
-
     private requests: Request<PageEngine>[];
     private completedUrls: string[];
     private requestedUrls: string[];
@@ -31,7 +29,11 @@ export class RequestManager<PageEngine> {
         this.requests = [];
 
         // this is just an empty dummy function
-        this.callbackRequestComplete = (): Promise<void> => { return new Promise((resolve): void => { resolve(); }); };
+        this.callbackRequestComplete = (): Promise<void> => {
+            return new Promise((resolve): void => {
+                resolve();
+            });
+        };
     }
 
     /**
@@ -56,14 +58,15 @@ export class RequestManager<PageEngine> {
      * Populate the request queue with UP too what we are allowed to allocate to our workers
      */
     private async populateRequestQueue(): Promise<void> {
-
         let initRequests: Request<PageEngine>[] = [];
-        if (this.requests.length > this.maxInstances) { // our current request queue is more then what we can handle at once, grab only what we can
+        if (this.requests.length > this.maxInstances) {
+            // our current request queue is more then what we can handle at once, grab only what we can
             initRequests = this.requests.splice(0, this.maxInstances);
             this.runningRequests += initRequests.length;
-        } else { // we have less then what we have for max instances, loop until we have max'd out what we can run
+        } else {
+            // we have less then what we have for max instances, loop until we have max'd out what we can run
             while (this.requests.length > 0 && this.runningRequests < this.maxInstances) {
-                if(typeof this.requests[0] !== "undefined") {
+                if (typeof this.requests[0] !== 'undefined') {
                     initRequests.push(this.requests.shift() as Request<PageEngine>);
                     this.runningRequests++;
                 }
@@ -73,20 +76,20 @@ export class RequestManager<PageEngine> {
         for (var i = 0; i < initRequests.length; i++) {
             try {
                 let responsePromise = initRequests[i].run();
-                responsePromise.then(async (resolveData: Request<PageEngine>): Promise<void> => {
-                    await this.callbackRequestComplete(resolveData);
-                    await resolveData.dispose();
-                    this.completedUrls.push(resolveData.getUrl());
-                    this.runningRequests--;
-                });
+                responsePromise.then(
+                    async (resolveData: Request<PageEngine>): Promise<void> => {
+                        await this.callbackRequestComplete(resolveData);
+                        await resolveData.dispose();
+                        this.completedUrls.push(resolveData.getUrl());
+                        this.runningRequests--;
+                    },
+                );
             } catch (exception) {
                 console.log(exception);
                 await initRequests[i].dispose();
                 this.runningRequests--;
-
             }
         }
-
     }
 
     /**
@@ -102,45 +105,43 @@ export class RequestManager<PageEngine> {
      * Note: After 4 intervals of having nothing to insert into the queue, the queue stops and the promise is resolved
      */
     public run(): Promise<void> {
+        return new Promise(
+            async (resolve): Promise<void> => {
+                this.runQueue = true;
+                this.runningRequests = 0;
 
-        return new Promise(async (resolve): Promise<void> => {
-            this.runQueue = true;
-            this.runningRequests = 0;
+                let noRequestFoundCount = 0;
 
-            let noRequestFoundCount = 0;
-
-            // this timer is what handles the core power of this whole thing
-            // at every specified interval the supplied function is called
-            // from there the queue is repopulated accordingly
-            let timer = setInterval(async (): Promise<void> => {
-
-                // we have the ability to populate the request queue and we definitely have request ready to go
-                if (this.runningRequests < this.maxInstances && this.requests.length > 0) {
-                    await this.populateRequestQueue();
-                    noRequestFoundCount = 0;
-                }
-
-                if (this.requests.length === 0 && this.runningRequests === 0) {
-                    noRequestFoundCount++;
-                    if (noRequestFoundCount > 4) {
-                        this.stop();
+                // this timer is what handles the core power of this whole thing
+                // at every specified interval the supplied function is called
+                // from there the queue is repopulated accordingly
+                let timer = setInterval(async (): Promise<void> => {
+                    // we have the ability to populate the request queue and we definitely have request ready to go
+                    if (this.runningRequests < this.maxInstances && this.requests.length > 0) {
+                        await this.populateRequestQueue();
+                        noRequestFoundCount = 0;
                     }
-                }
 
+                    if (this.requests.length === 0 && this.runningRequests === 0) {
+                        noRequestFoundCount++;
+                        if (noRequestFoundCount > 4) {
+                            this.stop();
+                        }
+                    }
 
-                if (this.runQueue === false) {
-                    clearInterval(timer);
-                    resolve();
-                }
-
-            }, this.timerManager);
-        });
+                    if (this.runQueue === false) {
+                        clearInterval(timer);
+                        resolve();
+                    }
+                }, this.timerManager);
+            },
+        );
     }
 
     /**
      * Sets the callback that allows code to be hooked and called whenever a request is done processing
      * By default a empty function is called so this is not needed unless you care about the results of the request
-     * @param callback 
+     * @param callback
      */
     public setRequestComplete(callback: (request: Request<PageEngine>) => Promise<void>): void {
         this.callbackRequestComplete = callback;
@@ -154,8 +155,8 @@ export class RequestManager<PageEngine> {
     }
 
     /**
-     * Sets the total amount of instances that a queue can have. 
-     * NOTE: THIS DOES NOT RELATE TO WEB WORKERS OR SERVICE WORKERS. This is purely the amount of request that can be in the queue at one time. 
+     * Sets the total amount of instances that a queue can have.
+     * NOTE: THIS DOES NOT RELATE TO WEB WORKERS OR SERVICE WORKERS. This is purely the amount of request that can be in the queue at one time.
      * NOTE: CHANGING THIS VALUE DOES NOT CLEAR OUT THE QUEUE.
      * @param totalInstances The max amount of instances that the queue is allowed to have at any one point
      */
@@ -168,8 +169,6 @@ export class RequestManager<PageEngine> {
         }
         return this.maxInstances;
     }
-
-}	
-
+}
 
 export default RequestManager;

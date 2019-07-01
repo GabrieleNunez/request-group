@@ -27,7 +27,6 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
     protected requestErrors: string[];
     protected pageData: PageEngine | null;
 
-    
     /**
 		Construct our generic web request.
 		Note: this generic web request has NO real world functionality
@@ -53,24 +52,24 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
 
     /** Determine if based off our last ping if this request is expired. Each request has 300 seconds between each ping before a request is considered expires */
     public isExpired(): boolean {
-        return (moment().unix() - this.momentPing.unix()) > 60;
+        return moment().unix() - this.momentPing.unix() > 60;
     }
 
     /**
-    * 
-    * @param key Grab the value that matches our key
-    * @typeparam T1 a type that specifies what we are expecting back from the metadata field
-    */
+     *
+     * @param key Grab the value that matches our key
+     * @typeparam T1 a type that specifies what we are expecting back from the metadata field
+     */
     public getMetadata<T1>(key: string): T1 | null {
-        return typeof this.metadataStorage[key] !== "undefined" ? (this.metadataStorage[key] as T1) : null;
+        return typeof this.metadataStorage[key] !== 'undefined' ? (this.metadataStorage[key] as T1) : null;
     }
 
     /**
-    * Write a supplied value to the specified key in our metadata cache on this request. 
-    * @param key Name of the metadata field we want to write to
-    * @param value The value that we want to store at that metadata field matching to our key
-    * @typeparam T1 the type we are expecting to write to the metadata field
-    */
+     * Write a supplied value to the specified key in our metadata cache on this request.
+     * @param key Name of the metadata field we want to write to
+     * @param value The value that we want to store at that metadata field matching to our key
+     * @typeparam T1 the type we are expecting to write to the metadata field
+     */
     public setMetadata<T1>(key: string, value: T1): void {
         this.metadataStorage[key] = value;
     }
@@ -101,9 +100,9 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
     }
 
     /**
-	*	Change the request url and run the request again
-	*	Note: this DOES NOT close the request, so it is possible to reuse peristant resources again
-	*/
+     *	Change the request url and run the request again
+     *	Note: this DOES NOT close the request, so it is possible to reuse peristant resources again
+     */
     public goto(requestUrl: string): Promise<Request<PageEngine>> {
         this.requestUrl = requestUrl;
         return this.run();
@@ -116,8 +115,8 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
         return this.pageData as PageEngine;
     }
     /**
-    * Free up any resources used by the request. useful if dealing with 
-    */
+     * Free up any resources used by the request. useful if dealing with
+     */
     public abstract dispose(): Promise<void>;
 
     /**

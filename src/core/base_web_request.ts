@@ -16,7 +16,6 @@ export interface WebRequestForm {
  * An abstract class that represents what a base web request could potentially look like
  */
 export abstract class BaseWebRequest<PageEngine> extends BaseRequest<PageEngine> {
-
     protected requestMethod: WebRequestMethods;
     protected requestForm: WebRequestForm;
     protected requestCookie: string;
@@ -32,7 +31,6 @@ export abstract class BaseWebRequest<PageEngine> extends BaseRequest<PageEngine>
         this.requestForm = {};
         this.requestCookie = '';
     }
-
 
     /**
      * Gets the current method being used in the web request
@@ -50,7 +48,7 @@ export abstract class BaseWebRequest<PageEngine> extends BaseRequest<PageEngine>
     }
 
     /**
-     * Using the specified key, set the supplied value in our form object 
+     * Using the specified key, set the supplied value in our form object
      * @param key The key that we want to point toward a field in the form object
      * @param value A value that we want to set the field to
      */
@@ -64,9 +62,8 @@ export abstract class BaseWebRequest<PageEngine> extends BaseRequest<PageEngine>
      * @returns Either the string value of the form that matches the specified field or NULL if the key does not exist in our form
      */
     public getForm(key: string): string | null {
-        return typeof this.requestForm[key] !== "undefined" ? this.requestForm[key] : null;
+        return typeof this.requestForm[key] !== 'undefined' ? this.requestForm[key] : null;
     }
-
 
     /**
      * Sets the request cookie to whatever value is specified
@@ -75,7 +72,6 @@ export abstract class BaseWebRequest<PageEngine> extends BaseRequest<PageEngine>
     public setCookie(entireCookie: string): void {
         this.requestCookie = entireCookie;
     }
-
 }
 
 export default BaseWebRequest;
