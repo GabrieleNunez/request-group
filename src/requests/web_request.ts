@@ -65,3 +65,5 @@ export class WebRequest extends BaseWebRequest<string> {
         );
     }
 }
+
+export default WebRequest;
