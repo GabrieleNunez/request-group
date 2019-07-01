@@ -1,5 +1,6 @@
 import Request from './request';
 import * as os from 'os';
+import { resolve } from 'url';
 
 export class RequestManager<PageEngine> {
     private requests: Request<PageEngine>[];
@@ -57,7 +58,7 @@ export class RequestManager<PageEngine> {
     /**
      * Populate the request queue with UP too what we are allowed to allocate to our workers
      */
-    private async populateRequestQueue(): Promise<void> {
+    private populateRequestQueue(): void {
         let initRequests: Request<PageEngine>[] = [];
         if (this.requests.length > this.maxInstances) {
             // our current request queue is more then what we can handle at once, grab only what we can
@@ -74,21 +75,18 @@ export class RequestManager<PageEngine> {
         }
 
         for (var i = 0; i < initRequests.length; i++) {
-            try {
-                let responsePromise = initRequests[i].run();
-                responsePromise.then(
-                    async (resolveData: Request<PageEngine>): Promise<void> => {
-                        await this.callbackRequestComplete(resolveData);
-                        await resolveData.dispose();
+            let responsePromise = initRequests[i].run();
+            responsePromise.then((resolveData: Request<PageEngine>): void => {
+                console.log('Performing complete callback on: ' + resolveData.getUrl());
+                this.callbackRequestComplete(resolveData).then((): void => {
+                    console.log('Calling dispose on: ' + resolveData.getUrl());
+                    resolveData.dispose().then((): void => {
+                        console.log('Completed: ' + resolveData.getUrl());
                         this.completedUrls.push(resolveData.getUrl());
                         this.runningRequests--;
-                    },
-                );
-            } catch (exception) {
-                console.log(exception);
-                await initRequests[i].dispose();
-                this.runningRequests--;
-            }
+                    });
+                });
+            });
         }
     }
 
@@ -100,42 +98,50 @@ export class RequestManager<PageEngine> {
         this.runQueue = false;
     }
 
+    public queueTimer(): Promise<void> {
+        return new Promise((resolve): void => {
+            // we have the ability to populate the request queue and we definitely have request ready to go
+            if (this.runningRequests < this.maxInstances && this.requests.length > 0) {
+                this.populateRequestQueue();
+                // noRequestFoundCount = 0;
+            }
+
+            if (this.requests.length === 0 && this.runningRequests === 0) {
+                // The blow commented is old code, not too sure if I want to toss it or provide a flag for it
+                /* noRequestFoundCount++;
+                if (noRequestFoundCount > 4) {
+                    this.stop();
+                } 
+                
+            */
+
+                this.stop();
+            }
+
+            if (this.runQueue === false) {
+                resolve();
+            } else {
+                setTimeout((): void => {
+                    this.queueTimer().then((): void => {
+                        resolve();
+                    });
+                }, this.timerManager);
+            }
+        });
+    }
+
     /**
      * Run the queue, populate it and let it handle its business.
      * Note: After 4 intervals of having nothing to insert into the queue, the queue stops and the promise is resolved
      */
     public run(): Promise<void> {
-        return new Promise(
-            async (resolve): Promise<void> => {
-                this.runQueue = true;
-                this.runningRequests = 0;
-
-                let noRequestFoundCount = 0;
-
-                // this timer is what handles the core power of this whole thing
-                // at every specified interval the supplied function is called
-                // from there the queue is repopulated accordingly
-                let timer = setInterval(async (): Promise<void> => {
-                    // we have the ability to populate the request queue and we definitely have request ready to go
-                    if (this.runningRequests < this.maxInstances && this.requests.length > 0) {
-                        await this.populateRequestQueue();
-                        noRequestFoundCount = 0;
-                    }
-
-                    if (this.requests.length === 0 && this.runningRequests === 0) {
-                        noRequestFoundCount++;
-                        if (noRequestFoundCount > 4) {
-                            this.stop();
-                        }
-                    }
-
-                    if (this.runQueue === false) {
-                        clearInterval(timer);
-                        resolve();
-                    }
-                }, this.timerManager);
-            },
-        );
+        return new Promise((resolve): void => {
+            this.runQueue = true;
+            this.runningRequests = 0;
+            this.queueTimer().then((): void => {
+                resolve();
+            });
+        });
     }
 
     /**

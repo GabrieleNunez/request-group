@@ -1,4 +1,4 @@
-import RequestManager from 'core/request_manager';
+import RequestManager from './core/request_manager';
 
 export * from './core/request';
 export * from './core/base_request';
