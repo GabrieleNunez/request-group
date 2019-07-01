@@ -1,6 +1,5 @@
 import Request from './request';
 import * as os from 'os';
-import { resolve } from 'url';
 
 export class RequestManager<PageEngine> {
     private requests: Request<PageEngine>[];
