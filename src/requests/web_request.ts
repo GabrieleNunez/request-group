@@ -2,25 +2,15 @@ import BaseWebRequest from '../core/base_web_request';
 import Request from '../core/request';
 import * as request from 'request';
 import * as URL from 'url';
+import moment = require('moment');
+import { rejects } from 'assert';
 
 export class WebRequest extends BaseWebRequest<string> {
 
     protected userAgent: string | null;
-    protected xml: boolean;
-
     public constructor(url: string, userAgent: string | null = null) {
         super(url);
         this.userAgent = userAgent;
-        this.xml = false;
-    }
-
-    /**
-     * Enables or disables xml mode on the request. If this method is called without true of false being specified then the default is true to turn it on.
-     * By default xml mode is turned OFF on web request, so calling this method by doing request.setXMLMode(); will enable it on. request.setXMLMode(false) to turn it off
-     * @param xmlMode 
-     */
-    public setXMLMode(xmlMode: boolean = true): void {
-        this.xml = xmlMode;
     }
 
     /**
@@ -36,10 +26,42 @@ export class WebRequest extends BaseWebRequest<string> {
      * 
      */
     public run(): Promise<Request<string>> {
-        return new Promise(async (resolve): Promise<void> => {
 
-      
-            resolve();
+        let urlTarget = URL.parse(this.requestUrl);
+        let urlHost: string | undefined = urlTarget.hostname;
+        return new Promise(async (resolve,reject): Promise<void> => {
+
+            if(urlHost === undefined) {
+                reject();
+            } else {
+
+                let headers = { 
+                    'User-Agent' : this.userAgent,
+                    'Connection' : 'keep-alive',
+                    'Accept' : '*/*',
+                    'Host' : urlHost as string,
+                };
+                
+                if(this.requestCookie && this.requestCookie.trim().length > 0) {
+                    headers['Cookie'] = this.requestCookie;
+                }
+
+                request({
+                    method : this.requestMethod,
+                    uri : this.requestUrl,
+                    headers :  headers,
+                    jar : typeof headers['Cookie'] == "undefined" ? true : false,
+                    strictSSL : false,
+                }, (error, response, body): void => {
+                    this.momentPing = moment();
+                    this.momentDone = moment();
+                    this.requestCompleted = true;
+                    this.momentDuration = moment.duration(this.momentInitiated.diff(this.momentDone));
+                    this.requestErrors.push(error);
+                    this.pageData = body;
+                    resolve(this);
+                });
+            }
         });
     }
 }
