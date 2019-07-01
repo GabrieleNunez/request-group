@@ -18,8 +18,7 @@ export class RequestManager<PageEngine> {
     public constructor(maxQueueSize: number = 4, timerManager: number = 2500) {
         this.timerManager = timerManager;
         if (maxQueueSize === 0) {
-            let cpuCores = os.cpus().length;
-            this.maxInstances = cpuCores;
+            this.autoCalcQueueSize();
         } else {
             this.maxInstances = maxQueueSize;
         }
@@ -42,7 +41,6 @@ export class RequestManager<PageEngine> {
 	*/
     public queue(webRequest: Request<PageEngine>, repeat: boolean = false): void {
         if (this.requestedUrls.includes(webRequest.getUrl()) === false || repeat === true) {
-            console.log('Queued: ' + webRequest.getUrl());
             this.requests.unshift(webRequest);
             this.requestedUrls.unshift(webRequest.getUrl());
         }
@@ -77,11 +75,8 @@ export class RequestManager<PageEngine> {
         for (var i = 0; i < initRequests.length; i++) {
             let responsePromise = initRequests[i].run();
             responsePromise.then((resolveData: Request<PageEngine>): void => {
-                console.log('Performing complete callback on: ' + resolveData.getUrl());
                 this.callbackRequestComplete(resolveData).then((): void => {
-                    console.log('Calling dispose on: ' + resolveData.getUrl());
                     resolveData.dispose().then((): void => {
-                        console.log('Completed: ' + resolveData.getUrl());
                         this.completedUrls.push(resolveData.getUrl());
                         this.runningRequests--;
                     });
@@ -106,21 +101,15 @@ export class RequestManager<PageEngine> {
                 // noRequestFoundCount = 0;
             }
 
+            // we have nothing left in our queue. Stop it
             if (this.requests.length === 0 && this.runningRequests === 0) {
-                // The blow commented is old code, not too sure if I want to toss it or provide a flag for it
-                /* noRequestFoundCount++;
-                if (noRequestFoundCount > 4) {
-                    this.stop();
-                } 
-                
-            */
-
                 this.stop();
             }
 
             if (this.runQueue === false) {
                 resolve();
             } else {
+                // still running? Set a timeout for another queueTimer function call
                 setTimeout((): void => {
                     this.queueTimer().then((): void => {
                         resolve();
@@ -168,11 +157,21 @@ export class RequestManager<PageEngine> {
      */
     public setMaxQueueSize(totalInstances: number = 0): number {
         if (totalInstances === 0) {
-            let cpuCores = os.cpus().length;
-            this.maxInstances = cpuCores;
+            this.autoCalcQueueSize();
         } else {
             this.maxInstances = totalInstances;
         }
+        return this.maxInstances;
+    }
+
+    /**
+     * Auto calculate the queue size based on how many cpu cores are visible to the system.
+     * Why use CPU cores vs some arbitary number? It's just a simple and quick solution.
+     * At some point I would like to make a Worker Thread version of RequestManager so this might become a bigger player at some point
+     */
+    private autoCalcQueueSize(): number {
+        let cpuCores = os.cpus().length;
+        this.maxInstances = cpuCores;
         return this.maxInstances;
     }
 }
