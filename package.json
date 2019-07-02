@@ -9,7 +9,7 @@
     "url": "https://github.com/GabrieleNunez/request-manager.git"
   },
   "scripts": {
-    "build": "echo \"Building\" && tsc"
+    "build": "echo \"Building\" && tsc && echo \"Completed\""
   },
   "author": "Gabriele M. Nunez",
   "license": "MIT",
