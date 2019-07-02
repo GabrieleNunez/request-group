@@ -56,7 +56,7 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
     }
 
     /**
-     *
+     * From our metadata storage get the value found at the field that matches our specified key
      * @param key Grab the value that matches our key
      * @typeparam T1 a type that specifies what we are expecting back from the metadata field
      */
