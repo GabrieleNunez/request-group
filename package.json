@@ -29,5 +29,21 @@
   "dependencies": {
     "moment": "^2.24.0",
     "request": "^2.88.0"
-  }
+  },
+  "keywords": [
+      "request",
+      "scraping",
+      "manager",
+      "http",
+      "file",
+      "utility",
+      "browser",
+      "async",
+      "asynchronous",
+      "web",
+      "eslint",
+      "typescript",
+      "prettier",
+      "moment"
+  ]
 }
