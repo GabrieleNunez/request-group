@@ -21,6 +21,30 @@ export class FileRequest extends BaseRequest<string> {
     }
 
     /**
+     * Gets the file access time of the file.
+     * Note: if method is called before the request is ran it won't return an accurate time
+     */
+    public getFileAccessTime(): moment.Moment {
+        return this.momentFileAccessed;
+    }
+
+    /**
+     * Gets the file creation time
+     * Note: if method is called before the request is ran it won't return an accurate time
+     */
+    public getFileCreatedTime(): moment.Moment {
+        return this.momentFileCreated;
+    }
+
+    /**
+     * Gets the file modification time of the file.
+     * Note: if method is called before the request is ran it won't return an accurate time
+     */
+    public getFileModifiedTime(): moment.Moment {
+        return this.momentFileModified;
+    }
+
+    /**
      * Dispose of anything if possible
      */
     public dispose(): Promise<void> {
