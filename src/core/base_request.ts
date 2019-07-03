@@ -126,13 +126,13 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
     public abstract run(): Promise<Request<PageEngine>>;
 
     /**
-     * Create a manager that is based off the return type of this request
+     * Create a manager that is based off the return type of this request.
+     * Note: this does not queue up the request into the manager
      * @param maxQueueSize The maximum queue size of the request manager ( this can be changed )
      * @param queueTimeInterval The amount of time between each queue check given in milliseconds. So 1000 = 1 second
      */
     public createManager(maxQueueSize: number = 4, queueTimeInterval: number = 2500): RequestManager<PageEngine> {
         let requestManager: RequestManager<PageEngine> = new RequestManager(maxQueueSize, queueTimeInterval);
-        requestManager.queue(this);
         return requestManager;
     }
 }
