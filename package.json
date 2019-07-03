@@ -44,6 +44,10 @@
       "eslint",
       "typescript",
       "prettier",
-      "moment"
+      "moment",
+      "batch",
+      "batch request",
+      "bulk",
+      "bulk request"
   ]
 }
