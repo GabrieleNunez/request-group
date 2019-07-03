@@ -1,7 +1,7 @@
 import Request from './request';
 import * as os from 'os';
 
-export class RequestManager<PageEngine> {
+export class RequestGroup<PageEngine> {
     private requests: Request<PageEngine>[];
     private completedUrls: string[];
     private requestedUrls: string[];
@@ -175,4 +175,4 @@ export class RequestManager<PageEngine> {
     }
 }
 
-export default RequestManager;
+export default RequestGroup;

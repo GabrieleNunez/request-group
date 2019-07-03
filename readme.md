@@ -1,10 +1,10 @@
-# Request Manager
+# Request Group
 
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.png?v=101)](https://github.com/ellerbrock/typescript-badges/)
 
 
-Request Manager is a module for primarily [Node.js](https://nodejs.org/en/) environments and written in [TypeScript](https://www.typescriptlang.org/). The entire purpose is to handle 
-batch request of multiple kinds in a friendly and agnostic way. Included in this module are two basic classes called [FileRequest](https://github.com/GabrieleNunez/request-manager/blob/master/src/requests/file_request.ts) and [WebRequest](https://github.com/GabrieleNunez/request-manager/blob/master/src/requests/web_request.ts) to get the ball rolling in your project. These class's are only basic and may not satisfy all your needs. If you are looking to expand or develop your own request type it would be wise to start by extending the [BaseRequest](https://github.com/GabrieleNunez/request-manager/blob/master/src/core/base_request.ts) or [BaseWebRequest](https://github.com/GabrieleNunez/request-manager/blob/master/src/core/base_web_request.ts). If you want to go deeper you can implement the [Request](https://github.com/GabrieleNunez/request-manager/blob/master/src/core/request.ts) interface entirely on your own. This module will of course work in a regular [Node.js](https://nodejs.org/en/) enviorment if that is your preference, but all examples and the preferred way to use this module is to use it with [TypeScript](https://www.typescriptlang.org/). All *.ds.ts files are included when building
+Request Group is a module for primarily [Node.js](https://nodejs.org/en/) environments and written in [TypeScript](https://www.typescriptlang.org/). The entire purpose is to handle 
+batch request of multiple kinds in a friendly and agnostic way. Included in this module are two basic classes called [FileRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/requests/file_request.ts) and [WebRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/requests/web_request.ts) to get the ball rolling in your project. These class's are only basic and may not satisfy all your needs. If you are looking to expand or develop your own request type it would be wise to start by extending the [BaseRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/core/base_request.ts) or [BaseWebRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/core/base_web_request.ts). If you want to go deeper you can implement the [Request](https://github.com/GabrieleNunez/request-group/blob/master/src/core/request.ts) interface entirely on your own. This module will of course work in a regular [Node.js](https://nodejs.org/en/) enviorment if that is your preference, but all examples and the preferred way to use this module is to use it with [TypeScript](https://www.typescriptlang.org/). All *.ds.ts files are included when building
 
 
 ## Installing and Building
@@ -13,8 +13,8 @@ This module has not yet been published to npm for now you will have to clone thi
 
 ```bash
 
-git clone https://github.com/GabrieleNunez/request-manager.git
-cd request-manager
+git clone https://github.com/GabrieleNunez/request-group.git
+cd request-group
 npm install
 npm run build
 
@@ -24,12 +24,12 @@ When  this module is published to the npm registry then this section will become
 
 - - -
 
-## Creating a request manager
+## Creating a request-groupヾ(-_- )ゞa
 
-Fortunately creating a request manager is extremely simple and straight forward. If you are using [TypeScript]() then RequestManager only requires one type supplied and two parameters.
+Fortunately creating a request-groupヾ(-_- )ゞa〈( ^.^) is extremely simple and straight forward. If you are using [TypeScript]() then RequestGroup only requires one type supplied and two parameters.
 
 ```typescript
-import { RequestManager, WebRequest } from 'request-manager';
+import { RequestGroup, WebRequest } from 'request-group';
 
 // if you dont supply the queue size then the default is 4
 const requestQueueSize: number = 4;
@@ -38,18 +38,18 @@ const requestQueueSize: number = 4;
 // the queue interval is given in millseconds since we use setTimeout
 const requestQueueInterval: number = 2500; 
 
-// create a new request manager with a page engine type of string
+// create a new Request Group with a page engine type of string
 // the page engine is simply the output of the Request. This could be a class or a primitive.
-// For example if we are using Cheerio this **should** be RequestManager<CheerioStatic>
-// If we are using puppeteer this **should** be RequestManager<puppeteer.Page>
-let foo:RequestManager<string> = new RequestManager<string>(requestQueueSize, requestQueueInterval);
+// For example if we are using Cheerio this **should** be RequestGroup<CheerioStatic>
+// If we are using puppeteer this **should** be RequestGroup<puppeteer.Page>
+let foo:RequestGroup<string> = new RequestGroup<string>(requestQueueSize, requestQueueInterval);
 
-// OR you can also create a request manager by using request.createManager(...) like so
-let webRequest: WebRequest = new WebRequest('https://github.com/GabrieleNunez/request-manager');
+// OR you can also create a Request Group by using request.createManager(...) like so
+let webRequest: WebRequest = new WebRequest('https://github.com/GabrieleNunez/request-group');
 let bar = webRequest.createManager(requestQueueSize, requestQueueInterval);
 
-// both ways will work just fine and give you a request manager
-// after you create your request manager just  queue up the request
+// both ways will work just fine and give you a Request Group
+// after you create your Request Group just  queue up the request
 foo.queue(webRequest);
 
 // when you are ready to run the queue
@@ -68,7 +68,7 @@ foo.run().then(() => {
 
 The **PageEngine** Type explained
 ```
-RequestManager<PageEngine>
+RequestGroup<PageEngine>
 
 The PageEngine is the output you are expecting from the request to return. 
 If you are using the built in request classes then the output is always going to be string.
@@ -81,7 +81,7 @@ To use Puppeteer and Cheerio as examples, if you wanted to create request to ext
 
 ## How to use ( Extending )
 
-Extending [BaseWebRequest](https://github.com/GabrieleNunez/request-manager/blob/master/src/core/base_web_request.ts) and using [Cheerio](https://cheerio.js.org/) as a page engine
+Extending [BaseWebRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/core/base_web_request.ts) and using [Cheerio](https://cheerio.js.org/) as a page engine
 
 #### **cheerio_request.ts**
 
@@ -89,7 +89,7 @@ Extending [BaseWebRequest](https://github.com/GabrieleNunez/request-manager/blob
 
 // File: cheerio_request.ts
 
-import { BaseWebRequest, Request } from 'request-manager';
+import { BaseWebRequest, Request } from 'request-group';
 import * as cheerio from 'cheerio';
 import * as moment from 'moment';
 import * as URL from 'url';
@@ -167,16 +167,16 @@ export default CheerioRequest;
 ```typescript
 // index.ts
 import CheerioRequest from './request_type/cheerio_request';
-import { RequestManager, Request } from 'request-manager';
+import { RequestGroup, Request } from 'request-group';
 
 function cheerioExample(): Promise<void> {
     return new Promise(
         async (resolve): Promise<void> => {
-            // create our request manager object
-            let requestManager: RequestManager<CheerioStatic> = new RequestManager<CheerioStatic>(2, 1000);
+            // create our Request Group object
+            let RequestGroup: RequestGroup<CheerioStatic> = new RequestGroup<CheerioStatic>(2, 1000);
 
             // hook in a callback that way we can read and manipulate the page data
-            requestManager.setRequestComplete(
+            RequestGroup.setRequestComplete(
                 (request: Request<CheerioStatic>): Promise<void> => {
                     return new Promise((requestResolve): void => {
                         let $: CheerioStatic = request.getPage();
@@ -206,7 +206,7 @@ function cheerioExample(): Promise<void> {
 
             // these are the things we want to crawl
             let urls: string[] = [
-                'https://github.com/GabrieleNunez/request-manager',
+                'https://github.com/GabrieleNunez/request-group',
                 'https://github.com/GabrieleNunez/bronco',
                 'https://github.com/GabrieleNunez/thecoconutcoder.com',
                 'https://github.com/GabrieleNunez/webcam.js',
@@ -227,11 +227,11 @@ function cheerioExample(): Promise<void> {
                 cheerioRequest.setMetadata<number>('request-index', i);
 
                 // queue up the request we just made
-                requestManager.queue(cheerioRequest);
+                RequestGroup.queue(cheerioRequest);
             }
 
             console.log('Letting request queue run');
-            await requestManager.run();
+            await RequestGroup.run();
 
             console.log('This request queue has completed');
             resolve();
@@ -251,15 +251,15 @@ cheerioExample().then((): void => {
 ## How to use (Built in File)
 #### **index.ts**
 ```typescript
-import { RequestManager, Request, FileRequest } from 'request-manager';
+import { RequestGroup, Request, FileRequest } from 'request-group';
 
 
 function fileExample(): Promise<void> {
     return new Promise(
         async (resolve): Promise<void> => {
-            // create our request manager object
-            let requestManager: RequestManager<string> = new RequestManager<string>(2, 2000);
-            requestManager.setRequestComplete(
+            // create our Request Group object
+            let RequestGroup: RequestGroup<string> = new RequestGroup<string>(2, 2000);
+            RequestGroup.setRequestComplete(
                 (request: Request<string>): Promise<void> => {
                     return new Promise((requestResolve): void => {
                         let fileRequest: FileRequest = request as FileRequest;
@@ -300,11 +300,11 @@ function fileExample(): Promise<void> {
                     fileName = 'unknown-' + i;
                 }
                 request.setMetadata<string>('name', fileName);
-                requestManager.queue(request);
+                RequestGroup.queue(request);
             }
 
             console.log('Letting file request run');
-            await requestManager.run();
+            await RequestGroup.run();
             console.log('Request completed!');
 
             resolve();

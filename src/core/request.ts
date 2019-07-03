@@ -1,4 +1,4 @@
-import RequestManager from './request_manager';
+import RequestGroup from './request_group';
 
 /**
  * The Request interfaces provides an abstract way to interact with all the key features to help us to read/manipulate request data
@@ -66,7 +66,7 @@ export interface Request<PageEngine> {
      * @param maxQueueSize The maximum queue size of the request manager ( this can be changed )
      * @param queueTimeInterval The amount of time between each queue check given in milliseconds. So 1000 = 1 second
      */
-    createManager(maxQueueSize: number, queueTimeInterval: number): RequestManager<PageEngine>;
+    createManager(maxQueueSize: number, queueTimeInterval: number): RequestGroup<PageEngine>;
 }
 
 export default Request;

@@ -1,5 +1,5 @@
 import Request from './request';
-import RequestManager from './request_manager';
+import RequestGroup from './request_group';
 import * as moment from 'moment';
 
 /**
@@ -131,8 +131,8 @@ export abstract class BaseRequest<PageEngine> implements Request<PageEngine> {
      * @param maxQueueSize The maximum queue size of the request manager ( this can be changed )
      * @param queueTimeInterval The amount of time between each queue check given in milliseconds. So 1000 = 1 second
      */
-    public createManager(maxQueueSize: number = 4, queueTimeInterval: number = 2500): RequestManager<PageEngine> {
-        let requestManager: RequestManager<PageEngine> = new RequestManager(maxQueueSize, queueTimeInterval);
+    public createManager(maxQueueSize: number = 4, queueTimeInterval: number = 2500): RequestGroup<PageEngine> {
+        let requestManager: RequestGroup<PageEngine> = new RequestGroup(maxQueueSize, queueTimeInterval);
         return requestManager;
     }
 }
