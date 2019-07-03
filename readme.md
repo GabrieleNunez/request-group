@@ -6,8 +6,14 @@
 Request Group is a module for primarily [Node.js](https://nodejs.org/en/) environments and written in [TypeScript](https://www.typescriptlang.org/). The entire purpose is to handle 
 batch request of multiple kinds in a friendly and agnostic way. Included in this module are two basic classes called [FileRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/requests/file_request.ts) and [WebRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/requests/web_request.ts) to get the ball rolling in your project. These class's are only basic and may not satisfy all your needs. If you are looking to expand or develop your own request type it would be wise to start by extending the [BaseRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/core/base_request.ts) or [BaseWebRequest](https://github.com/GabrieleNunez/request-group/blob/master/src/core/base_web_request.ts). If you want to go deeper you can implement the [Request](https://github.com/GabrieleNunez/request-group/blob/master/src/core/request.ts) interface entirely on your own. This module will of course work in a regular [Node.js](https://nodejs.org/en/) enviorment if that is your preference, but all examples and the preferred way to use this module is to use it with [TypeScript](https://www.typescriptlang.org/). All *.ds.ts files are included when building
 
+## Installing
 
-## Installing and Building
+```bash
+npm install request-group
+```
+
+
+## Building
 
 This module has not yet been published to npm for now you will have to clone this repository and then build from source
 
