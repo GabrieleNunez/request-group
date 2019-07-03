@@ -26,7 +26,7 @@ When  this module is published to the npm registry then this section will become
 
 ## Creating a request-groupヾ(-_- )ゞa
 
-Fortunately creating a request-groupヾ(-_- )ゞa〈( ^.^) is extremely simple and straight forward. If you are using [TypeScript]() then RequestGroup only requires one type supplied and two parameters.
+Fortunately creating a request-group is extremely simple and straight forward. If you are using [TypeScript]() then RequestGroup only requires one type supplied and two parameters.
 
 ```typescript
 import { RequestGroup, WebRequest } from 'request-group';
@@ -49,6 +49,17 @@ let webRequest: WebRequest = new WebRequest('https://github.com/GabrieleNunez/re
 let bar = webRequest.createManager(requestQueueSize, requestQueueInterval);
 
 // both ways will work just fine and give you a Request Group
+// if you want to hook into the request group and find out ASAP when a request is completed
+// hook in a callback that way we can read and manipulate the page data
+requestGroup.setRequestComplete((request: Request<CheerioStatic>): Promise<void> => {
+    console.log("You can manipulate the returned request here".);
+    return new Promise((resolve): void => {
+        console.log("You can also manipulate it here");
+        console.log("This request has completed");
+        resolve();
+    });
+});
+
 // after you create your Request Group just  queue up the request
 foo.queue(webRequest);
 
@@ -173,10 +184,10 @@ function cheerioExample(): Promise<void> {
     return new Promise(
         async (resolve): Promise<void> => {
             // create our Request Group object
-            let RequestGroup: RequestGroup<CheerioStatic> = new RequestGroup<CheerioStatic>(2, 1000);
+            let requestGroup: RequestGroup<CheerioStatic> = new RequestGroup<CheerioStatic>(2, 1000);
 
             // hook in a callback that way we can read and manipulate the page data
-            RequestGroup.setRequestComplete(
+            requestGroup.setRequestComplete(
                 (request: Request<CheerioStatic>): Promise<void> => {
                     return new Promise((requestResolve): void => {
                         let $: CheerioStatic = request.getPage();
@@ -227,11 +238,11 @@ function cheerioExample(): Promise<void> {
                 cheerioRequest.setMetadata<number>('request-index', i);
 
                 // queue up the request we just made
-                RequestGroup.queue(cheerioRequest);
+                requestGroup.queue(cheerioRequest);
             }
 
             console.log('Letting request queue run');
-            await RequestGroup.run();
+            await requestGroup.run();
 
             console.log('This request queue has completed');
             resolve();
@@ -258,8 +269,8 @@ function fileExample(): Promise<void> {
     return new Promise(
         async (resolve): Promise<void> => {
             // create our Request Group object
-            let RequestGroup: RequestGroup<string> = new RequestGroup<string>(2, 2000);
-            RequestGroup.setRequestComplete(
+            let requestGroup: RequestGroup<string> = new RequestGroup<string>(2, 2000);
+            requestGroup.setRequestComplete(
                 (request: Request<string>): Promise<void> => {
                     return new Promise((requestResolve): void => {
                         let fileRequest: FileRequest = request as FileRequest;
@@ -300,11 +311,11 @@ function fileExample(): Promise<void> {
                     fileName = 'unknown-' + i;
                 }
                 request.setMetadata<string>('name', fileName);
-                RequestGroup.queue(request);
+                requestGroup.queue(request);
             }
 
             console.log('Letting file request run');
-            await RequestGroup.run();
+            await requestGroup.run();
             console.log('Request completed!');
 
             resolve();
