@@ -28,9 +28,7 @@ When  this module is published to the npm registry then this section will become
 Fortunately creating a request manager is extremely simple and straight forward. If you are using [TypeScript]() then RequestManager only requires one type supplied and two parameters.
 
 ```typescript
-
-import RequestManager from 'request-manager';
-// import { RequestManager } from 'request-manager
+import { RequestManager, WebRequest } from 'request-manager';
 
 // if you dont supply the queue size then the default is 4
 const requestQueueSize: number = 4;
@@ -43,7 +41,26 @@ const requestQueueInterval: number = 2500;
 // the page engine is simply the output of the Request. This could be a class or a primitive.
 // For example if we are using Cheerio this **should** be RequestManager<CheerioStatic>
 // If we are using puppeteer this **should** be RequestManager<puppeteer.Page>
-let requestManager:RequestManager<string> = new RequestManager<string>(requestQueueSize, requestQueueInterval);
+let foo:RequestManager<string> = new RequestManager<string>(requestQueueSize, requestQueueInterval);
+
+// OR you can also create a request manager by using request.createManager(...) like so
+let webRequest: WebRequest = new WebRequest('https://github.com/GabrieleNunez/request-manager');
+let bar = webRequest.createManager(requestQueueSize, requestQueueInterval);
+
+// both ways will work just fine and give you a request manager
+// after you create your request manager just  queue up the request
+foo.queue(webRequest);
+
+// when you are ready to run the queue
+foo.run().then(() => {
+    console.log('Queue completed');
+});
+
+/** 
+ * If you wanted to use await
+ * await foo.run();
+ * console.log('Queue completed');
+*/
 
 ```
 
