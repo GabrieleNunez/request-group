@@ -23,6 +23,44 @@ When  this module is published to the npm registry then this section will become
 
 - - -
 
+## Creating a request manager
+
+Fortunately creating a request manager is extremely simple and straight forward. If you are using [TypeScript]() then RequestManager only requires one type supplied and two parameters.
+
+```typescript
+
+import RequestManager from 'request-manager';
+// import { RequestManager } from 'request-manager
+
+// if you dont supply the queue size then the default is 4
+const requestQueueSize: number = 4;
+
+// if you don't supply the queue interval then the default is 2500 or 2.5 seconds
+// the queue interval is given in millseconds since we use setTimeout
+const requestQueueInterval: number = 2500; 
+
+// create a new request manager with a page engine type of string
+// the page engine is simply the output of the Request. This could be a class or a primitive.
+// For example if we are using Cheerio this **should** be RequestManager<CheerioStatic>
+// If we are using puppeteer this **should** be RequestManager<puppeteer.Page>
+let requestManager:RequestManager<string> = new RequestManager<string>(requestQueueSize, requestQueueInterval);
+
+```
+
+
+The **PageEngine** Type explained
+```
+RequestManager<PageEngine>
+
+The PageEngine is the output you are expecting from the request to return. 
+If you are using the built in request classes then the output is always going to be string.
+
+To use Puppeteer and Cheerio as examples, if you wanted to create request to extend and return the output of those then the PageEngine **should** be puppeteer.Page or CheerioStatic respectively
+
+```
+
+
+
 ## How to use ( Extending )
 
 Extending [BaseWebRequest](https://github.com/GabrieleNunez/request-manager/blob/master/src/core/base_web_request.ts) and using [Cheerio](https://cheerio.js.org/) as a page engine
