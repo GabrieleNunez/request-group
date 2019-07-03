@@ -15,6 +15,7 @@ This module has not yet been published to npm for now you will have to clone thi
 
 git clone https://github.com/GabrieleNunez/request-manager.git
 cd request-manager
+npm install
 npm run build
 
 ```
