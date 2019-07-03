@@ -317,3 +317,34 @@ fileExample().then((): void => {
 });
 
 ```
+- - -
+
+## Found a problem? Have a suggestion? Want a feature?
+
+I am looking to colloborate more with other developers. All issues will be addresses ASAP and pull request's welcomed. Let's make something great
+
+
+- - -
+
+## Development Dependencies
+
+* @types/node ^12.0.10
+* @types/request ^2.48.1
+* @typescript-eslint/eslint-plugin ^ 1.11.0
+* @typescript-eslint/parser ^ 1.11.1
+* eslint ^6.0.1
+* eslint-config-prettier ^ 6.0.0
+* eslint-plugin-prettier ^ 3.1.0
+* prettier ^ 1.18.2
+* ts-node ^ 8.3.0
+* typescript ^ 3.5.2
+
+## Library Dependencies
+
+* moment ^ 2.24.0
+* request ^ 2.88.0
+
+
+## Keywords
+
+request scraping manager http file utility browser async asynchronous web eslint typescript prettier moment
