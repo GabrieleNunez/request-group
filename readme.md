@@ -15,8 +15,6 @@ npm install request-group
 
 ## Building
 
-This module has not yet been published to npm for now you will have to clone this repository and then build from source
-
 ```bash
 
 git clone https://github.com/GabrieleNunez/request-group.git
