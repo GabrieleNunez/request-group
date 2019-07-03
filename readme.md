@@ -24,7 +24,7 @@ When  this module is published to the npm registry then this section will become
 
 - - -
 
-## Creating a request-groupヾ(-_- )ゞa
+## Creating a request-group
 
 Fortunately creating a request-group is extremely simple and straight forward. If you are using [TypeScript]() then RequestGroup only requires one type supplied and two parameters.
 
@@ -359,4 +359,11 @@ I am looking to colloborate more with other developers. All issues will be addre
 
 ## Keywords
 
-request scraping manager http file utility browser async asynchronous web eslint typescript prettier moment
+request scraping manager http file utility browser async asynchronous web eslint typescript prettier moment batch group
+
+ヾ(-_- )ゞ
+
+〈( ^.^)ノ
+
+ƪ(ƪ꒪ৱ৹)ᵒʰ˵˵
+
