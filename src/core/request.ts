@@ -1,3 +1,5 @@
+import RequestManager from './request_manager';
+
 /**
  * The Request interfaces provides an abstract way to interact with all the key features to help us to read/manipulate request data
  */
@@ -57,6 +59,14 @@ export interface Request<PageEngine> {
      * Returns the output of the page as the PageEngine type that was specified. This allows you to read/manipulate it in anyway you want
      */
     getPage(): PageEngine;
+
+    /**
+     * Create a manager that is based off the return type of this request.
+     * Note: this does not queue up the request into the manager
+     * @param maxQueueSize The maximum queue size of the request manager ( this can be changed )
+     * @param queueTimeInterval The amount of time between each queue check given in milliseconds. So 1000 = 1 second
+     */
+    createManager(maxQueueSize: number, queueTimeInterval: number): RequestManager<PageEngine>;
 }
 
 export default Request;

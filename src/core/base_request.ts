@@ -1,6 +1,6 @@
 import Request from './request';
+import RequestManager from './request_manager';
 import * as moment from 'moment';
-import RequestManager from 'index';
 
 /**
  * The type of data allowed into our metadata
