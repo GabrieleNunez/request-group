@@ -72,3 +72,5 @@ export class JSONRequest<JSONFormat extends {}> extends BaseWebRequest<JSONForma
         );
     }
 }
+
+export default JSONRequest;

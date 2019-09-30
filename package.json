@@ -1,6 +1,6 @@
 {
   "name": "request-group",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Handle multiple request async",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
